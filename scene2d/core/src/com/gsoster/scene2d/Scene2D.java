@@ -5,11 +5,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 
 public class Scene2D extends ApplicationAdapter {
@@ -29,8 +31,45 @@ public class Scene2D extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(stage);
 
 		//Begin layout
-		TextButton textButton = new TextButton("Hello", skin);
-		stage.addActor(textButton);
+		Table root = new Table();
+		stage.addActor(root);
+		root.setFillParent(true);
+
+
+		Table skillsTable = new Table();
+		TextButton textButton = new TextButton("Skill1", skin);
+		skillsTable.defaults().space(5);
+		skillsTable.add(textButton);
+		skillsTable.add(SkillButton.generateButton("Skill2", skin));
+		skillsTable.add(new TextButton("Skill3", skin));
+		skillsTable.row();
+		skillsTable.add(new TextButton("Skill4", skin));
+		skillsTable.add(new TextButton("Skill5", skin));
+		skillsTable.add(new TextButton("Skill6", skin));
+		root.add(skillsTable);
+		skillsTable.defaults().reset();
+		TextButton endTurnBtn = new TextButton("End Turn", skin);
+		endTurnBtn.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				System.out.println("You Clicked me!!");
+			}
+		});
+		endTurnBtn.addListener(new FocusListener() {
+			@Override
+			public boolean handle(Event event) {
+				System.out.println("You hovered me!!");
+				return super.handle(event);
+			}
+		});
+		root.add(endTurnBtn).fill();
+
+		skin.get(Label.LabelStyle.class).font.getData().markupEnabled = true;
+		Label label = new Label("This [RED]is a test[] of the [#579dd8]Color Markup Language[].", skin);
+		root.add(label);
+
+		root.row();
+
 
 	}
 
